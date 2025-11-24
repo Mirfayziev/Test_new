@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block page_title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+  <h2>Admin Dashboard</h2>
+  <p>Total users: {{ user_stats.total }}</p>
+  <p>Total tasks: {{ task_stats.total }}</p>
+</div>
+{% endblock %}

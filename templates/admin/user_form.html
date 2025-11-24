@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block page_title %}User Form{% endblock %}
+{% block content %}
+<div class="container">
+  <h2>{{ 'Edit' if user else 'New' }} User</h2>
+  <form method="post">
+    <label>Username</label><input name="username" value="{{ user.username if user else '' }}" {% if user %}readonly{% endif %}>
+    <label>Email</label><input name="email" value="{{ user.email if user else '' }}">
+    <label>Full name</label><input name="full_name" value="{{ user.full_name if user else '' }}">
+    <label>Phone</label><input name="phone" value="{{ user.phone if user else '' }}">
+    <label>Role</label>
+    <select name="role">
+      {% for r in ['admin','rahbar','xodim','user'] %}
+      <option value="{{ r }}" {% if user and user.role==r %}selected{% endif %}>{{ r }}</option>
+      {% endfor %}
+    </select>
+    <label>Active</label><input type="checkbox" name="is_active" {% if user and user.is_active %}checked{% endif %}>
+    {% if not user %}
+    <label>Password</label><input type="password" name="password">
+    {% endif %}
+    <button type="submit">Save</button>
+  </form>
+</div>
+{% endblock %}
