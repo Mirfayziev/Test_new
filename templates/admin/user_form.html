@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block page_title %}{{ 'Tahrirlash' if user else 'Yangi User' }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">
+        <i class="bi bi-person-{{ 'pencil' if user else 'plus' }}"></i> 
+        {{ 'User Tahrirlash' if user else 'Yangi User Yaratish' }}
+    </h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">To'liq ism *</label>
+                            <input type="text" class="form-control" name="full_name" 
+                                   value="{{ user.full_name if user else '' }}" required>
+                        </div>
+                        
+                        {% if not user %}
+                        <div class="mb-3">
+                            <label class="form-label">Username *</label>
+                            <input type="text" class="form-control" name="username" required>
+                            <small class="text-muted">O'zgartirib bo'lmaydi</small>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-control" name="email" 
+                                   value="{{ user.email if user else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Telefon</label>
+                            <input type="tel" class="form-control" name="phone" 
+                                   value="{{ user.phone if user else '' }}" 
+                                   placeholder="+998 90 123 45 67">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Rol *</label>
+                            <select class="form-select" name="role" required 
+                                    {{ 'disabled' if user and user.username == 'admin' else '' }}>
+                                <option value="admin" {{ 'selected' if user and user.role == 'admin' else '' }}>
+                                    Admin (Barcha huquqlar)
+                                </option>
+                                <option value="rahbar" {{ 'selected' if user and user.role == 'rahbar' else '' }}>
+                                    Rahbar (Ko'p huquqlar)
+                                </option>
+                                <option value="xodim" {{ 'selected' if user and user.role == 'xodim' else '' }}>
+                                    Xodim (Cheklangan)
+                                </option>
+                                <option value="user" {{ 'selected' if user and user.role == 'user' else '' }}>
+                                    User (Juda cheklangan)
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="is_active" 
+                                       {{ 'checked' if not user or user.is_active else '' }}>
+                                <label class="form-check-label">Faol</label>
+                            </div>
+                        </div>
+                        
+                        {% if not user %}
+                        <div class="mb-3">
+                            <label class="form-label">Parol *</label>
+                            <input type="password" class="form-control" name="password" 
+                                   required minlength="6" placeholder="Kamida 6 belgi">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="must_change_password" checked>
+                                <label class="form-check-label">
+                                    Keyingi kirishda parolni o'zgartirish majburiy
+                                </label>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Saqlash
+                            </button>
+                            <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Bekor qilish
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">Rol Tushuntirishlari</h6>
+                </div>
+                <div class="card-body">
+                    <p><strong>Admin:</strong><br>
+                    Barcha huquqlar, user management, system sozlamalari</p>
+                    
+                    <p><strong>Rahbar:</strong><br>
+                    Ko'p huquqlar, topshiriq berish, hisobotlar</p>
+                    
+                    <p><strong>Xodim:</strong><br>
+                    O'z topshiriqlarini bajarish, cheklangan kirish</p>
+                    
+                    <p><strong>User:</strong><br>
+                    Juda cheklangan, faqat ko'rish</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

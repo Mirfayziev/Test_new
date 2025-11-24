@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block page_title %}{{ 'Yangi' if not item else 'Tahrirlash' }} Tabriknoma{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h2><i class="bi bi-gift"></i> {{ 'Yangi' if not item else 'Tahrirlash' }} Tabriknoma</h2>
+    
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Kategoriya *</label>
+                        <select class="form-select" name="category" required>
+                            <option value="">Tanlang...</option>
+                            <option value="birthday" {{ 'selected' if item and item.category == 'birthday' }}>Tug'ilgan kun</option>
+                            <option value="wedding" {{ 'selected' if item and item.category == 'wedding' }}>To'y</option>
+                            <option value="holiday" {{ 'selected' if item and item.category == 'holiday' }}>Bayram</option>
+                            <option value="achievement" {{ 'selected' if item and item.category == 'achievement' }}>Yutuq</option>
+                            <option value="other" {{ 'selected' if item and item.category == 'other' }}>Boshqa</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Kimga *</label>
+                        <input type="text" class="form-control" name="recipient_name" 
+                               value="{{ item.recipient_name if item }}" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Sabab</label>
+                        <input type="text" class="form-control" name="occasion" 
+                               value="{{ item.occasion if item }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Sana</label>
+                        <input type="date" class="form-control" name="date" 
+                               value="{{ item.date.strftime('%Y-%m-%d') if item and item.date }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Sovg'a</label>
+                        <input type="text" class="form-control" name="gift_description" 
+                               value="{{ item.gift_description if item }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Summa</label>
+                        <input type="number" class="form-control" name="amount" 
+                               value="{{ item.amount if item }}">
+                    </div>
+                    
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Xabar</label>
+                        <textarea class="form-control" name="message" rows="3">{{ item.message if item }}</textarea>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Rasm</label>
+                        <input type="file" class="form-control" name="photo" accept="image/*">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Sertifikat (PDF)</label>
+                        <input type="file" class="form-control" name="certificate" accept=".pdf">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Saqlash
+                </button>
+                <a href="{{ url_for('congratulations') }}" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Bekor qilish
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

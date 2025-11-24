@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block page_title %}Topshiriqlar{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-list-check"></i> Topshiriqlar</h2>
+        {% if current_user.role in ['admin', 'rahbar'] %}
+        <a href="{{ url_for('task_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Yangi topshiriq
+        </a>
+        {% endif %}
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon orange" style="width: 50px; height: 50px;">
+                                <i class="bi bi-list-check"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">{{ tasks|length }}</h5>
+                            <small class="text-muted">Jami topshiriqlar</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon blue" style="width: 50px; height: 50px;">
+                                <i class="bi bi-hourglass-split"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">{{ tasks|selectattr('status', 'equalto', 'pending')|list|length }}</h5>
+                            <small class="text-muted">Kutilmoqda</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon green" style="width: 50px; height: 50px;">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">{{ tasks|selectattr('status', 'equalto', 'completed')|list|length }}</h5>
+                            <small class="text-muted">Bajarilgan</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon pink" style="width: 50px; height: 50px;">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">{{ tasks|selectattr('status', 'equalto', 'in_progress')|list|length }}</h5>
+                            <small class="text-muted">Jarayonda</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tasks Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Topshiriq</th>
+                            <th>Xodim</th>
+                            <th>Muddat</th>
+                            <th>Ustunlik</th>
+                            <th>Status</th>
+                            <th>Progress</th>
+                            <th>Harakatlar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>
+                                <a href="{{ url_for('task_detail', id=task.id) }}" class="text-decoration-none">
+                                    <strong>{{ task.title }}</strong>
+                                </a>
+                                {% if task.category %}
+                                <br><small class="text-muted">{{ task.category }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.assigned_to %}
+                                <i class="bi bi-person"></i> {{ task.assigned_to.full_name }}
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.deadline %}
+                                <i class="bi bi-calendar"></i> {{ format_date(task.deadline) }}
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.priority == 'high' %}
+                                <span class="badge bg-danger">Yuqori</span>
+                                {% elif task.priority == 'medium' %}
+                                <span class="badge bg-warning">O'rta</span>
+                                {% else %}
+                                <span class="badge bg-info">Past</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.status == 'completed' %}
+                                <span class="badge bg-success">Bajarilgan</span>
+                                {% elif task.status == 'in_progress' %}
+                                <span class="badge bg-primary">Jarayonda</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Kutilmoqda</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ task.progress or 0 }}%"
+                                         aria-valuenow="{{ task.progress or 0 }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        {{ task.progress or 0 }}%
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('task_detail', id=task.id) }}" 
+                                   class="btn btn-sm btn-info" title="Ko'rish">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                {% if current_user.role in ['admin', 'rahbar'] %}
+                                <a href="{{ url_for('task_edit', id=task.id) }}" 
+                                   class="btn btn-sm btn-primary" title="Tahrirlash">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                                <p class="mt-2">Topshiriqlar mavjud emas</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

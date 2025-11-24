@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block page_title %}Admin – Foydalanuvchilar boshqaruvi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between mb-4">
+        <h3 class="fw-bold">Foydalanuvchilar boshqaruvi</h3>
+        <a href="{{ url_for('register') }}" class="btn btn-primary rounded-pill">
+            + Yangi foydalanuvchi qo‘shish
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Ism</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Holati</th>
+                    <th width="160">Harakat</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.full_name }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.email }}</td>
+
+                    <td>
+                        <form method="POST" action="{{ url_for('admin_set_role', user_id=u.id) }}" class="d-flex gap-2">
+                            <select name="role" class="form-select form-select-sm">
+                                <option value="xodim" {% if u.role=='xodim' %}selected{% endif %}>Xodim</option>
+                                <option value="rahbar" {% if u.role=='rahbar' %}selected{% endif %}>Rahbar</option>
+                                <option value="admin" {% if u.role=='admin' %}selected{% endif %}>Admin</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary">OK</button>
+                        </form>
+                    </td>
+
+                    <td>
+                        {% if u.is_active %}
+                            <span class="badge bg-success">Faol</span>
+                        {% else %}
+                            <span class="badge bg-danger">Bloklangan</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('chat', user_id=u.id) }}"
+                               class="btn btn-sm btn-outline-secondary">Chat</a>
+
+                            <a href="{{ url_for('admin_toggle_user', user_id=u.id) }}"
+                               class="btn btn-sm {% if u.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                                {% if u.is_active %}Bloklash{% else %}Faollashtirish{% endif %}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        Hali foydalanuvchilar yo‘q
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

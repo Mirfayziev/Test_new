@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% if vehicle %}Transport Tahrirlash{% else %}Yangi Transport{% endif %}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Markasi *</label>
+                            <input type="text" class="form-control" name="brand" value="{{ vehicle.brand if vehicle else '' }}" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Modeli</label>
+                            <input type="text" class="form-control" name="model" value="{{ vehicle.model if vehicle else '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Yili</label>
+                            <input type="number" class="form-control" name="year" value="{{ vehicle.year if vehicle else '' }}">
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Davlat raqami *</label>
+                            <input type="text" class="form-control" name="plate_number" value="{{ vehicle.plate_number if vehicle else '' }}" required>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Rangi</label>
+                            <input type="text" class="form-control" name="color" value="{{ vehicle.color if vehicle else '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">VIN raqami</label>
+                        <input type="text" class="form-control" name="vin_number" value="{{ vehicle.vin_number if vehicle else '' }}">
+                    </div>
+                    
+                    <hr>
+                    <h5>Haydovchi Ma'lumotlari</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">F.I.O</label>
+                            <input type="text" class="form-control" name="driver_name" value="{{ vehicle.driver_name if vehicle else '' }}">
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Guvohnoma</label>
+                            <input type="text" class="form-control" name="driver_license" value="{{ vehicle.driver_license if vehicle else '' }}">
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Telefon</label>
+                            <input type="text" class="form-control" name="driver_phone" value="{{ vehicle.driver_phone if vehicle else '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Oxirgi Ta'mirlash</label>
+                            <input type="date" class="form-control" name="last_maintenance_date" 
+                                   value="{% if vehicle and vehicle.last_maintenance_date %}{{ vehicle.last_maintenance_date.strftime('%Y-%m-%d') }}{% endif %}">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Probeg (km)</label>
+                            <input type="number" class="form-control" name="mileage" value="{{ vehicle.mileage if vehicle else '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Defekt Akti</label>
+                        <textarea class="form-control" name="defect_report" rows="3">{{ vehicle.defect_report if vehicle else '' }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Izohlar</label>
+                        <textarea class="form-control" name="notes" rows="2">{{ vehicle.notes if vehicle else '' }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('vehicles') }}" class="btn btn-secondary">Bekor qilish</a>
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

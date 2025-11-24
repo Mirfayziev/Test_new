@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>🤝 Autsorsing Xizmatlari</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    {% for service in services %}
+    <div class="col-md-6 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>{{ service.service_name }}</h5>
+                <p><strong>Turi:</strong> {{ service.service_type or '-' }}</p>
+                <p><strong>Provayder:</strong> {{ service.provider_name or '-' }}</p>
+                <p><strong>Shartnoma:</strong> {{ service.contract_number or '-' }}</p>
+                <p><strong>Summa:</strong> {{ service.contract_amount or '-' }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

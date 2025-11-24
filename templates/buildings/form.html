@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bino Formi</h2>
+<form method="POST" enctype="multipart/form-data">
+    <input type="text" name="name" class="form-control mb-3" placeholder="Nomi" required value="{{ building.name if building }}">
+    <input type="text" name="address" class="form-control mb-3" placeholder="Manzil" value="{{ building.address if building }}">
+    <input type="number" name="area" class="form-control mb-3" placeholder="Maydon (m²)" value="{{ building.area if building }}">
+    <input type="file" name="photo" class="form-control mb-3" accept="image/*">
+    <input type="file" name="documents" class="form-control mb-3" accept=".pdf">
+    <button type="submit" class="btn btn-primary">Saqlash</button>
+</form>
+{% endblock %}

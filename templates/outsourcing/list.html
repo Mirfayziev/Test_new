@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block page_title %}Autsorsing{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mb-4">
+        <h2><i class="bi bi-people"></i> Autsorsing</h2>
+        <a href="{{ url_for('outsourcing_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Yangi
+        </a>
+    </div>
+    
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Xizmat</th>
+                        <th>Kompaniya</th>
+                        <th>Shartnoma</th>
+                        <th>Muddat</th>
+                        <th>Summa</th>
+                        <th>Status</th>
+                        <th>Harakatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in outsourcing %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.service_name }}</td>
+                        <td>{{ item.company_name }}</td>
+                        <td>{{ item.contract_number }}</td>
+                        <td>{{ format_date(item.start_date) }} - {{ format_date(item.end_date) }}</td>
+                        <td>{{ format_money(item.amount) }} UZS</td>
+                        <td><span class="badge bg-success">{{ item.status }}</span></td>
+                        <td>
+                            <a href="{{ url_for('outsourcing_edit', id=item.id) }}" class="btn btn-sm btn-primary">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">Ma'lumotlar yo'q</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

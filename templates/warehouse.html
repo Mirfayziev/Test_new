@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>📦 Ombor So'rovnomalari</h2>
+        <div class="float-end">
+            <a href="{{ url_for('warehouse_new') }}" class="btn btn-primary">➕ Yangi So'rovnoma</a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Raqam</th>
+                    <th>Sana</th>
+                    <th>Bo'lim</th>
+                    <th>Status</th>
+                    <th>So'rovchi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.request_number }}</td>
+                    <td>{{ req.request_date.strftime('%d.%m.%Y') if req.request_date else '-' }}</td>
+                    <td>{{ req.department or '-' }}</td>
+                    <td><span class="badge bg-warning">{{ req.status }}</span></td>
+                    <td>{{ req.requested_by.full_name if req.requested_by else '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

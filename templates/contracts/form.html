@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Shartnoma Formi</h2>
+<form method="POST" enctype="multipart/form-data">
+    <input type="text" name="contract_number" class="form-control mb-3" placeholder="Raqam" required>
+    <input type="text" name="company_name" class="form-control mb-3" placeholder="Kompaniya" required>
+    <input type="number" name="amount" class="form-control mb-3" placeholder="Summa">
+    <input type="date" name="start_date" class="form-control mb-3">
+    <input type="date" name="end_date" class="form-control mb-3">
+    <input type="file" name="file" class="form-control mb-3" accept=".pdf">
+    <button type="submit" class="btn btn-primary">Saqlash</button>
+</form>
+{% endblock %}

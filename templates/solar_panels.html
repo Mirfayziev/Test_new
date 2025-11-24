@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>☀️ Quyosh Panellari</h2>
+        <div class="float-end">
+            <a href="{{ url_for('solar_panel_new') }}" class="btn btn-warning">➕ Yangi Panel</a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    {% for panel in panels %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Panel #{{ panel.id }}</h5>
+                <p><strong>Bino:</strong> {{ panel.building.name if panel.building else '-' }}</p>
+                <p><strong>Panel soni:</strong> {{ panel.panel_count or '-' }}</p>
+                <p><strong>Quvvat:</strong> {{ panel.total_capacity or '-' }} kW</p>
+                <p><strong>Ishlab chiqaruvchi:</strong> {{ panel.manufacturer or '-' }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

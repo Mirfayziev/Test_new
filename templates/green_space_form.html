@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% if space %}Yashil Makonni Tahrirlash{% else %}Yangi Yashil Makon{% endif %}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Nomi *</label>
+                        <input type="text" class="form-control" name="name" value="{{ space.name if space else '' }}" required>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Kategoriya</label>
+                            <input type="text" class="form-control" name="category" value="{{ space.category if space else '' }}">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Maydon (m²)</label>
+                            <input type="number" class="form-control" name="area" value="{{ space.area if space else '' }}" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Joylashuv</label>
+                        <input type="text" class="form-control" name="location" value="{{ space.location if space else '' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">O'simlik turlari</label>
+                        <textarea class="form-control" name="plant_types" rows="3">{{ space.plant_types if space else '' }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Tavsif</label>
+                        <textarea class="form-control" name="description" rows="3">{{ space.description if space else '' }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('green_spaces') }}" class="btn btn-secondary">Bekor qilish</a>
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
