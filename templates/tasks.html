@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>📋 Topshiriqlar</h2>
+        <div class="float-end">
+            {% if current_user.role in ['admin', 'rahbar'] %}
+            <a href="{{ url_for('task_new') }}" class="btn btn-primary">➕ Yangi Topshiriq</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nomi</th>
+                            <th>Biriktirilgan</th>
+                            <th>Muddat</th>
+                            <th>Status</th>
+                            <th>Prioritet</th>
+                            <th>Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.id }}</td>
+                            <td>{{ task.title }}</td>
+                            <td>{{ task.assigned_user.full_name if task.assigned_user else '-' }}</td>
+                            <td>
+                                <span class="badge bg-{{ task.get_urgency_color() }}">
+                                    {{ task.due_date.strftime('%d.%m.%Y') if task.due_date else '-' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-info">{{ task.status }}</span>
+                            </td>
+                            <td>{{ task.priority }}</td>
+                            <td>
+                                <a href="{{ url_for('task_edit', id=task.id) }}" class="btn btn-sm btn-warning">Tahrirlash</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

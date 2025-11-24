@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>{{ task.title }}</h4>
+                <span class="badge bg-{{ task.get_urgency_color() }}">{{ task.get_days_remaining() }} kun qoldi</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Tavsif:</strong></p>
+                <p>{{ task.description }}</p>
+                
+                <p><strong>Muddat:</strong> {{ task.due_date.strftime('%d.%m.%Y') if task.due_date else '-' }}</p>
+                <p><strong>Prioritet:</strong> {{ task.priority }}</p>
+                <p><strong>Status:</strong> <span class="badge bg-info">{{ task.status }}</span></p>
+                
+                {% if task.mechanism %}
+                <hr>
+                <p><strong>Amalga oshirish mexanizmi:</strong></p>
+                <p>{{ task.mechanism }}</p>
+                {% endif %}
+                
+                {% if current_user.id == task.assigned_to_id and task.status != 'completed' %}
+                <hr>
+                <form method="POST" action="{{ url_for('task_complete', id=task.id) }}">
+                    <div class="mb-3">
+                        <label class="form-label">Natija</label>
+                        <textarea class="form-control" name="result" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Bajarish va Yuborish</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>💬 Chat</h5>
+            </div>
+            <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                {% for comment in comments %}
+                <div class="mb-2">
+                    <strong>{{ comment.user.full_name }}</strong>
+                    <small class="text-muted">{{ comment.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                    <p class="mb-0">{{ comment.comment }}</p>
+                    <hr>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer">
+                <form method="POST" action="{{ url_for('ijro_comment', id=task.id) }}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="comment" placeholder="Xabar yozing..." required>
+                        <button class="btn btn-primary" type="submit">📤</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

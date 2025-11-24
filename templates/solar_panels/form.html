@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block page_title %}Quyosh Paneli{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h2><i class="bi bi-sun"></i> Quyosh Paneli</h2>
+    
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nomi *</label>
+                        <input type="text" class="form-control" name="name" 
+                               value="{{ panel.name if panel }}" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Quvvat (kW) *</label>
+                        <input type="number" class="form-control" name="capacity" 
+                               value="{{ panel.capacity if panel }}" step="0.1" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Joylashuv</label>
+                        <input type="text" class="form-control" name="location" 
+                               value="{{ panel.location if panel }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" name="status">
+                            <option value="active" {{ 'selected' if panel and panel.status == 'active' }}>Faol</option>
+                            <option value="maintenance" {{ 'selected' if panel and panel.status == 'maintenance' }}>Ta'mirda</option>
+                            <option value="inactive" {{ 'selected' if panel and panel.status == 'inactive' }}>Nofaol</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-12"><hr class="my-4"></div>
+                    <div class="col-md-12"><h5>API Integration</h5></div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">API Endpoint</label>
+                        <input type="url" class="form-control" name="api_endpoint" 
+                               value="{{ panel.api_endpoint if panel }}" 
+                               placeholder="https://api.example.com/solar/data">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">API Key</label>
+                        <input type="text" class="form-control" name="api_key" 
+                               value="{{ panel.api_key if panel }}">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Saqlash
+                </button>
+                <a href="{{ url_for('solar_panels') }}" class="btn btn-secondary">Bekor qilish</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AF IMPERIYA - Enterprise Management System">
+    <title>{% block title %}AF IMPERIYA - Enterprise Management{% endblock %}</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="AF Logo" class="mb-2">
+            <div class="logo-text">AF IMPERIYA</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}" class="sidebar-nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <!-- TOPSHIRIQLAR (Faqat Rahbar - yaratish va boshqarish) -->
+            {% if current_user.role in ['admin', 'rahbar'] %}
+            <a href="{{ url_for('tasks') }}" class="sidebar-nav-item {% if request.endpoint == 'tasks' %}active{% endif %}">
+                <i class="bi bi-list-check"></i>
+                <span>Topshiriqlar (Boshqarish)</span>
+            </a>
+            {% endif %}
+            
+            <!-- IJRO (Hammaga - o'z topshiriqlarini bajarish) -->
+            <a href="{{ url_for('ijro') }}" class="sidebar-nav-item {% if request.endpoint == 'ijro' %}active{% endif %}">
+                <i class="bi bi-clipboard-check"></i>
+                <span>Ijro (Bajarish)</span>
+            </a>
+            
+            {% if current_user.role in ['admin', 'rahbar'] %}
+            <a href="{{ url_for('vehicles') }}" class="sidebar-nav-item {% if request.endpoint == 'vehicles' %}active{% endif %}">
+                <i class="bi bi-truck"></i>
+                <span>Avto Transport</span>
+            </a>
+            
+            <a href="{{ url_for('buildings') }}" class="sidebar-nav-item {% if request.endpoint == 'buildings' %}active{% endif %}">
+                <i class="bi bi-building"></i>
+                <span>Binolar</span>
+            </a>
+            
+            <a href="{{ url_for('green_spaces') }}" class="sidebar-nav-item {% if request.endpoint == 'green_spaces' %}active{% endif %}">
+                <i class="bi bi-tree"></i>
+                <span>Yashil Makonlar</span>
+            </a>
+            
+            <a href="{{ url_for('solar_panels') }}" class="sidebar-nav-item {% if request.endpoint == 'solar_panels' %}active{% endif %}">
+                <i class="bi bi-sun"></i>
+                <span>Quyosh Panellari</span>
+            </a>
+            
+            <a href="{{ url_for('employees') }}" class="sidebar-nav-item {% if request.endpoint == 'employees' %}active{% endif %}">
+                <i class="bi bi-people"></i>
+                <span>Xodimlar</span>
+            </a>
+            
+            <a href="{{ url_for('outsourcing') }}" class="sidebar-nav-item {% if request.endpoint == 'outsourcing' %}active{% endif %}">
+                <i class="bi bi-briefcase"></i>
+                <span>Autsorsing</span>
+            </a>
+            
+            <a href="{{ url_for('organizations') }}" class="sidebar-nav-item {% if request.endpoint == 'organizations' %}active{% endif %}">
+                <i class="bi bi-bank"></i>
+                <span>Tashkilotlar</span>
+            </a>
+            
+            <a href="{{ url_for('guests') }}" class="sidebar-nav-item {% if request.endpoint == 'guests' %}active{% endif %}">
+                <i class="bi bi-person-badge"></i>
+                <span>Mehmonlar</span>
+            </a>
+            
+            <a href="{{ url_for('congratulations') }}" class="sidebar-nav-item {% if request.endpoint == 'congratulations' %}active{% endif %}">
+                <i class="bi bi-gift"></i>
+                <span>Tabriknomalar</span>
+            </a>
+            
+            <a href="{{ url_for('contracts') }}" class="sidebar-nav-item {% if request.endpoint == 'contracts' %}active{% endif %}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Shartnomalar</span>
+            </a>
+            
+            <a href="{{ url_for('warehouse') }}" class="sidebar-nav-item {% if request.endpoint == 'warehouse' %}active{% endif %}">
+                <i class="bi bi-box-seam"></i>
+                <span>Ombor</span>
+            </a>
+            {% endif %}
+            
+            <!-- Admin Panel -->
+            {% if current_user.role == 'admin' %}
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 1rem 0;">
+            <div class="sidebar-section-title" style="color: rgba(255,255,255,0.5); font-size: 12px; padding: 0.5rem 1.5rem; text-transform: uppercase;">
+                Admin Panel
+            </div>
+            <a href="{{ url_for('admin_dashboard') }}" class="sidebar-nav-item {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                <i class="bi bi-speedometer2"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a href="{{ url_for('admin_users') }}" class="sidebar-nav-item {% if request.endpoint and 'admin_user' in request.endpoint %}active{% endif %}">
+                <i class="bi bi-people"></i>
+                <span>Foydalanuvchilar</span>
+            </a>
+            {% endif %}
+            
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 1rem 0;">
+            <a href="{{ url_for('profile') }}" class="sidebar-nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+                <i class="bi bi-person-circle"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+            <div class="user-info">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                            type="button" 
+                            id="userDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false"
+                            style="margin-right: 10px;">
+                        <div class="user-avatar" style="display: inline-block; width: 24px; height: 24px; margin-right: 5px;">
+                            {{ current_user.full_name[0].upper() }}
+                        </div>
+                        <span>{{ current_user.full_name }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('profile') }}">
+                                <i class="bi bi-person"></i> Profil sozlamalari
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('change_password') }}">
+                                <i class="bi bi-key"></i> Parolni o'zgartirish
+                            </a>
+                        </li>
+                        {% if current_user.role == 'admin' %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('admin_users') }}">
+                                <i class="bi bi-shield-check"></i> Admin Panel
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                                <i class="bi bi-box-arrow-right"></i> Chiqish
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show scale-in" role="alert">
+                    <strong>
+                        {% if category == 'success' %}<i class="bi bi-check-circle"></i>
+                        {% elif category == 'danger' %}<i class="bi bi-x-circle"></i>
+                        {% elif category == 'warning' %}<i class="bi bi-exclamation-triangle"></i>
+                        {% else %}<i class="bi bi-info-circle"></i>{% endif %}
+                    </strong>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

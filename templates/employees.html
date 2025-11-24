@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>👥 Xodimlar</h2>
+        <div class="float-end">
+            {% if current_user.role in ['admin', 'rahbar'] %}
+            <a href="{{ url_for('employee_new') }}" class="btn btn-primary">➕ Yangi Xodim</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    {% for employee in employees %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>{{ employee.full_name }}</h5>
+                <p><strong>Lavozim:</strong> {{ employee.position or '-' }}</p>
+                <p><strong>Bo'lim:</strong> {{ employee.department or '-' }}</p>
+                <p><strong>Telefon:</strong> {{ employee.phone or '-' }}</p>
+                <p><strong>Email:</strong> {{ employee.email or '-' }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

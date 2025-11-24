@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% if panel %}Panelni Tahrirlash{% else %}Yangi Quyosh Paneli{% endif %}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Bino *</label>
+                        <select class="form-control" name="building_id" required>
+                            <option value="">Tanlang</option>
+                            {% for building in buildings %}
+                            <option value="{{ building.id }}" {% if panel and panel.building_id == building.id %}selected{% endif %}>
+                                {{ building.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Panel soni</label>
+                            <input type="number" class="form-control" name="panel_count" value="{{ panel.panel_count if panel else '' }}">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Umumiy quvvat (kW)</label>
+                            <input type="number" class="form-control" name="total_capacity" value="{{ panel.total_capacity if panel else '' }}" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ishlab chiqaruvchi</label>
+                            <input type="text" class="form-control" name="manufacturer" value="{{ panel.manufacturer if panel else '' }}">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Model</label>
+                            <input type="text" class="form-control" name="model" value="{{ panel.model if panel else '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">O'rnatilgan sana</label>
+                        <input type="date" class="form-control" name="installation_date" 
+                               value="{% if panel and panel.installation_date %}{{ panel.installation_date.strftime('%Y-%m-%d') }}{% endif %}">
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('solar_panels') }}" class="btn btn-secondary">Bekor qilish</a>
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

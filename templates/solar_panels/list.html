@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block page_title %}Quyosh Panellari{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mb-4">
+        <h2><i class="bi bi-sun"></i> Quyosh Panellari</h2>
+        <a href="{{ url_for('solar_panel_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Yangi
+        </a>
+    </div>
+    
+    <div class="row">
+        {% for panel in solar_panels %}
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5>{{ panel.name }}</h5>
+                    <p class="mb-1"><strong>Quvvat:</strong> {{ panel.capacity }} kW</p>
+                    <p class="mb-1"><strong>Hozirgi:</strong> {{ panel.current_production or 0 }} kW</p>
+                    <p class="mb-1"><strong>Kunlik:</strong> {{ panel.daily_production or 0 }} kWh</p>
+                    <p class="mb-3"><strong>Status:</strong> 
+                        <span class="badge bg-{{ 'success' if panel.status == 'active' else 'secondary' }}">
+                            {{ panel.status }}
+                        </span>
+                    </p>
+                    <a href="{{ url_for('solar_panel_edit', id=panel.id) }}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil"></i> Tahrirlash
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">Ma'lumotlar yo'q</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

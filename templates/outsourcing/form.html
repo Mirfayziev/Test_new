@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block page_title %}Autsorsing{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h2><i class="bi bi-people"></i> Autsorsing</h2>
+    
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Xizmat nomi *</label>
+                        <input type="text" class="form-control" name="service_name" 
+                               value="{{ item.service_name if item }}" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Kompaniya *</label>
+                        <input type="text" class="form-control" name="company_name" 
+                               value="{{ item.company_name if item }}" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Shartnoma raqami</label>
+                        <input type="text" class="form-control" name="contract_number" 
+                               value="{{ item.contract_number if item }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Shartnoma sanasi</label>
+                        <input type="date" class="form-control" name="contract_date" 
+                               value="{{ item.contract_date.strftime('%Y-%m-%d') if item and item.contract_date }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Boshlangan sana</label>
+                        <input type="date" class="form-control" name="start_date" 
+                               value="{{ item.start_date.strftime('%Y-%m-%d') if item and item.start_date }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tugash sanasi</label>
+                        <input type="date" class="form-control" name="end_date" 
+                               value="{{ item.end_date.strftime('%Y-%m-%d') if item and item.end_date }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Summa</label>
+                        <input type="number" class="form-control" name="amount" 
+                               value="{{ item.amount if item }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" name="status">
+                            <option value="active" {{ 'selected' if item and item.status == 'active' }}>Faol</option>
+                            <option value="completed" {{ 'selected' if item and item.status == 'completed' }}>Yakunlangan</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Kontakt shaxs</label>
+                        <input type="text" class="form-control" name="contact_person" 
+                               value="{{ item.contact_person if item }}">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Telefon</label>
+                        <input type="tel" class="form-control" name="contact_phone" 
+                               value="{{ item.contact_phone if item }}">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Saqlash
+                </button>
+                <a href="{{ url_for('outsourcing_list') }}" class="btn btn-secondary">Bekor qilish</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

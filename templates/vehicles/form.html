@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block page_title %}{{ 'Yangi Transport' if not vehicle else 'Transportni Tahrirlash' }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-truck"></i> 
+            {{ 'Yangi Transport Qo\'shish' if not vehicle else 'Transportni Tahrirlash' }}
+        </h2>
+        <a href="{{ url_for('vehicles') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Orqaga
+        </a>
+    </div>
+    
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <!-- Asosiy ma'lumotlar -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="bi bi-truck"></i> Nomi *</label>
+                        <input type="text" class="form-control" name="name" 
+                               value="{{ vehicle.name if vehicle else '' }}" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="bi bi-tag"></i> Brend</label>
+                        <input type="text" class="form-control" name="brand" 
+                               value="{{ vehicle.brand if vehicle else '' }}"
+                               placeholder="Toyota, Mercedes, va h.k.">
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="bi bi-card-text"></i> Model</label>
+                        <input type="text" class="form-control" name="model" 
+                               value="{{ vehicle.model if vehicle else '' }}">
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="bi bi-calendar"></i> Yili</label>
+                        <input type="number" class="form-control" name="year" 
+                               value="{{ vehicle.year if vehicle else '' }}" 
+                               min="1990" max="2030">
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label"><i class="bi bi-credit-card"></i> Davlat raqami</label>
+                        <input type="text" class="form-control" name="plate_number" 
+                               value="{{ vehicle.plate_number if vehicle else '' }}"
+                               placeholder="01 A 123 BC">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="bi bi-hash"></i> VIN raqami</label>
+                        <input type="text" class="form-control" name="vin_number" 
+                               value="{{ vehicle.vin_number if vehicle else '' }}">
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label"><i class="bi bi-palette"></i> Rangi</label>
+                        <input type="text" class="form-control" name="color" 
+                               value="{{ vehicle.color if vehicle else '' }}">
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label"><i class="bi bi-fuel-pump"></i> Yoqilg'i turi</label>
+                        <select class="form-select" name="fuel_type">
+                            <option value="">Tanlang...</option>
+                            <option value="benzin" {{ 'selected' if vehicle and vehicle.fuel_type == 'benzin' }}>Benzin</option>
+                            <option value="dizel" {{ 'selected' if vehicle and vehicle.fuel_type == 'dizel' }}>Dizel</option>
+                            <option value="gaz" {{ 'selected' if vehicle and vehicle.fuel_type == 'gaz' }}>Gaz</option>
+                            <option value="elektr" {{ 'selected' if vehicle and vehicle.fuel_type == 'elektr' }}>Elektr</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="bi bi-folder"></i> Kategoriya</label>
+                        <select class="form-select" name="category">
+                            <option value="">Tanlang...</option>
+                            <option value="yuk" {{ 'selected' if vehicle and vehicle.category == 'yuk' }}>Yuk mashinasi</option>
+                            <option value="yengil" {{ 'selected' if vehicle and vehicle.category == 'yengil' }}>Yengil mashina</option>
+                            <option value="bus" {{ 'selected' if vehicle and vehicle.category == 'bus' }}>Avtobus</option>
+                            <option value="maxsus" {{ 'selected' if vehicle and vehicle.category == 'maxsus' }}>Maxsus texnika</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label"><i class="bi bi-speedometer"></i> Probeg (km)</label>
+                        <input type="number" class="form-control" name="mileage" 
+                               value="{{ vehicle.mileage if vehicle else 0 }}">
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label"><i class="bi bi-check-circle"></i> Status</label>
+                        <select class="form-select" name="status">
+                            <option value="active" {{ 'selected' if vehicle and vehicle.status == 'active' }}>Faol</option>
+                            <option value="maintenance" {{ 'selected' if vehicle and vehicle.status == 'maintenance' }}>Ta'mirda</option>
+                            <option value="inactive" {{ 'selected' if vehicle and vehicle.status == 'inactive' }}>Nofaol</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <!-- FILE UPLOAD - Talab #3 -->
+                <h5 class="mb-3"><i class="bi bi-cloud-upload"></i> Fayllar</h5>
+                
+                <div class="row">
+                    <!-- Rasm yuklash -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-image"></i> Transport rasmi
+                        </label>
+                        <input type="file" class="form-control" name="photo" 
+                               accept="image/png,image/jpeg,image/jpg">
+                        <small class="text-muted">PNG, JPG, JPEG (max 5MB)</small>
+                        
+                        {% if vehicle and vehicle.photo_path %}
+                        <div class="mt-2">
+                            <img src="{{ url_for('uploaded_file', filename=vehicle.photo_path) }}" 
+                                 alt="Transport" class="img-thumbnail" style="max-height: 150px;">
+                            <br><small class="text-success">
+                                <i class="bi bi-check-circle"></i> Rasm yuklangan
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- PDF hujjatlar yuklash -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-file-pdf"></i> Hujjatlar (PDF)
+                        </label>
+                        <input type="file" class="form-control" name="documents" 
+                               accept="application/pdf">
+                        <small class="text-muted">PDF format (max 10MB)</small>
+                        
+                        {% if vehicle and vehicle.documents_path %}
+                        <div class="mt-2">
+                            <a href="{{ url_for('uploaded_file', filename=vehicle.documents_path) }}" 
+                               target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-file-pdf"></i> PDF ni ko'rish
+                            </a>
+                            <br><small class="text-success">
+                                <i class="bi bi-check-circle"></i> PDF yuklangan
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <!-- Submit buttons -->
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Saqlash
+                    </button>
+                    <a href="{{ url_for('vehicles') }}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Bekor qilish
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// File input validation
+document.querySelector('input[name="photo"]').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Rasm hajmi 5MB dan katta bo\'lmasligi kerak!');
+            e.target.value = '';
+        }
+    }
+});
+
+document.querySelector('input[name="documents"]').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        if (file.size > 10 * 1024 * 1024) {
+            alert('PDF hajmi 10MB dan katta bo\'lmasligi kerak!');
+            e.target.value = '';
+        }
+    }
+});
+</script>
+{% endblock %}

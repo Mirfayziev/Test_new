@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>{% if building %}Binoni Tahrirlash{% else %}Yangi Bino{% endif %}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Nomi *</label>
+                        <input type="text" class="form-control" name="name" value="{{ building.name if building else '' }}" required>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Kategoriya</label>
+                            <input type="text" class="form-control" name="category" value="{{ building.category if building else '' }}">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Maydon (m²)</label>
+                            <input type="number" class="form-control" name="area" value="{{ building.area if building else '' }}" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Manzil</label>
+                        <input type="text" class="form-control" name="address" value="{{ building.address if building else '' }}">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Qavatlar soni</label>
+                            <input type="number" class="form-control" name="floors" value="{{ building.floors if building else '' }}">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Qurilgan yili</label>
+                            <input type="number" class="form-control" name="construction_year" value="{{ building.construction_year if building else '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Tavsif</label>
+                        <textarea class="form-control" name="description" rows="4">{{ building.description if building else '' }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('buildings') }}" class="btn btn-secondary">Bekor qilish</a>
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
